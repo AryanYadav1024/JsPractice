@@ -69,7 +69,7 @@ btn.addEventListener('click', event => {
 
 // the best method - event delegation and event bubbling 
 
-const body = document.querySelector('.color-changer');
+const parent = document.querySelector('.color-changer');
 // get the parent attach event listner here
 // imagine 100 children running foreach through node list reduces performance
 // more memory so instead event delegation
@@ -80,7 +80,7 @@ const body = document.querySelector('.color-changer');
 // window.location.href="some-site.com";
 
 
-body.addEventListener('click',event=>{
+parent.addEventListener('click',event=>{
     const style = getComputedStyle(event.target);
     document.body.style.backgroundColor=
     style.backgroundColor;
