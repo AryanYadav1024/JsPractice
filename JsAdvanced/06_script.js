@@ -163,7 +163,7 @@ Two
 First function gets overwritten.
 
 
-
+In JavaScript, the alert() method displays a pop-up dialog box with a specified message and an OK button
 =====================================================
 3. addEventListener() ⭐
 =====================================================
