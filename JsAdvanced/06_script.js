@@ -330,6 +330,14 @@ element running the listener
 
 
 
+
+why though? 
+imagine list instead of adding multiple button listner we can add button listner at the top and 
+currentTarget is element running the listner and
+target is where event happened 
+
+event bubbling - if no event listner is found the event bubbles upward 
+event delegation - so attach it at parent that groups particular type of buttons or events 
 =====================================================
 Changing UI using Events
 =====================================================
