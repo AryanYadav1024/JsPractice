@@ -40,3 +40,25 @@ computed styles layer after the render tree
                 Layout + Paint
 */
 
+
+// another method
+
+/* 
+
+
+body {
+  --bg-color: white;
+  background-color: var(--bg-color);
+}suppose this is the css
+
+
+
+btn.addEventListener('click', event => {
+    const styles = getComputedStyle(event.target);
+
+    document.body.style.setProperty(
+        "--bg-color",
+        styles.backgroundColor
+    );
+});
+*/
