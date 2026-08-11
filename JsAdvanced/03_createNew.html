@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: black;
+        }
+        .weekDays{
+            background-color: gray;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 1.5rem;
+        }
+        .container ul{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            list-style-type: none;
+        }
+        .day{
+            margin: 1rem;
+            padding: 1rem;
+            border: 1px solid rgb(19, 231, 4);
+            background-color: rgba(0, 0, 0, 0.767);
+            color: white;
+            max-width: 100%;
+        }
+        .day:hover{
+            transform: scale(1.2);
+            background-color: rgba(19, 231, 4, 0.767);
+            transition: transform 0.2s ease-out 0.1s;
+        }
+        .day::before{
+            content: "Day: ";
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="weekDays">
+        <div class="container">
+            <ul class="parent">
+                <li class="day">Monday</li>
+                <li class="day">Tuesday</li>
+                <li class="day">Wednesday</li>
+                <li class="day">Thursday</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="03_traversal.js"></script>
+<!-- you can either keep it at the end and let it load after the HTML content
+     or you can use defer meaning download js file before parsing the html -->
+</html>

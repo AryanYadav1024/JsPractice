@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit and Remove Elements</title>
+</head>
+<body style="background-color: #212121; color: #fff;">
+    <ul class="language">
+        <li>javascript</li>
+    </ul>
+</body>
+<script>
+    const div = document.createElement("div");
+    const child = document.querySelector(".language")
+    div.appendChild(child);
+    div.style.backgroundColor="#191919";
+    div.style.alignContent="center";
+    div.children[0].style.listStyle="none";
+    document.body.appendChild(div);
+
+    languages = ["ruby","python","java","c#"];
+    console.log(languages);
+    function addLanguage(langName){
+        const li = document.createElement("li");
+        li.innerHTML=`${langName}`;
+        document.querySelector(".language").appendChild(li);
+    }
+
+    languages.forEach(lang => {
+        addLanguage(lang);
+    });
+
+
+    // now this is bad practice tree is traversed again and again 
+    // in large scale this may cause optimization issues
+
+ 
+
+    function addOptiLanguage(langName){
+        const li = document.createElement("li");
+        li.append(document.createTextNode(`${langName}`));
+        document.querySelector(".language").appendChild(li);
+    }
+
+    languages.forEach(item => {
+        addOptiLanguage(item);
+    })
+
+
+
+    // edit 
+    const thirdLang = document.querySelector("li:nth-child(3)");
+    // thirdLang.innerHTML="mojo";
+    const newLi = document.createElement("li");
+    newLi.textContent="mojo";
+    // to replace we use replaceWith() or replaceChild()
+    thirdLang.replaceWith(newLi)
+
+    // edit 2
+    const firstLang = document.querySelector("li:nth-child(1)");
+    firstLang.outerHTML = "<li>TypeScript</li>";
+    // edit 3 
+    const ul = document.querySelector(".language");
+    console.log(ul.childElementCount);
+    const ninthLang = document.querySelector("li:nth-child(9)");
+    const LI = document.createElement("li");
+    LI.appendChild(document.createTextNode("english"));
+    ul.replaceChild(LI,ninthLang);
+
+    // remove
+    ul.removeChild(ul.lastChild);
+</script>
+</html>
