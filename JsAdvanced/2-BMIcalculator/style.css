@@ -1,0 +1,130 @@
+:root{
+    /* colors */
+    --color-surface: #2d2d2d;
+    --color-accent: rgb(118, 5, 141);
+    --color-background: #202020;
+    --color-text: #f0f0f0;
+    --font-family: 'Arial', sans-serif;
+    --color-highlight: rgb(65, 65, 65);
+    /* typography */
+    --font-size-base: 16px;
+    --font-size-large: 20px;
+
+    /* spacing */
+    --spacing-base: 16px;
+    --spacing-large: 20px;
+
+    /* transitions */
+    --transition-base: 0.2s ease;
+
+    /* border */
+    --border-style: 1px solid var(--color-highlight);
+    --border-radius: 8px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a{
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.container{
+    max-width: 1200px;
+    width: 90%;
+    margin-inline: auto;
+    padding: var(--spacing-large);
+}
+
+.card{
+    background-color: var(--color-surface);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-base);
+    margin-bottom: var(--spacing-large);
+    transition: tranform,background-colo var(--transition-base);
+    cursor: pointer;
+}
+.card:hover{
+    transform: translateY(-4px);
+    background-color: var(--color-highlight);
+}
+
+.button{
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    padding: var(--spacing-base) var(--spacing-large);
+    border: var(--border-style);
+    cursor: pointer;
+    transition: transform,background-color var(--transition-base);
+    margin: 8px;
+    border-radius: var(--border-radius);
+}
+
+.button:hover{
+    background-color: var(--color-surface);
+    transform: scale(1.05);
+}
+
+
+/* main styling */
+
+body{
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+#navBar{
+    background-color: rgb(244, 227, 204);
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+}
+.main-container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.main-container h1{
+    margin-bottom: 5px;
+}
+.main-container h1::after{
+    margin-left: 0.25rem;
+    content: "🤨";
+}
+#bmiform{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+input{
+    padding: 1%;
+    font: inherit;
+}
+label{
+    font-size: var(--font-size-large);
+    margin: 3px;
+}
+label,input{
+    display:inline-block;
+    width: 20%;
+    margin-bottom: 10px;
+}
+.submit-button,.reset-button{
+    width: 17%;
+    font-size: var(--font-size-base);
+}
+#result{
+    font-size: var(--font-size-large);
+}
