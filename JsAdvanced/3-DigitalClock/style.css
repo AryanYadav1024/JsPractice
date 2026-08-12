@@ -91,46 +91,24 @@ body{
     width: 100%;
     max-width: 100%;
 }
-.main-container{
-    display:flex;
+
+main{
+    height: 84vh;
+    display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
-.main-container h1{
-    margin-bottom: 5px;
+h1::after{
+    content: "⏰";
+    margin-left: 7px;
 }
-.color-changer{
-    display: flex;
+.clock{
+    margin-top: 5px;
+    width: 12%;
+    padding: 1.6rem 1.5rem;
+    background-color: var(--color-highlight);
+    transition: none;
+    text-align: center;
 }
-.main-container h1::after{
-    margin-left: 0.25rem;
-    content: "🤨";
-}
-.color-button{
-    padding: 70px;
-    font-size: 30px;
-    color: rgb(231, 231, 231);
-    border: 2px solid white;
-    border-radius: var(--border-radius);
-
-}
-
-#redButton{
-    background-color: red;
-}
-#greenButton{
-    background-color: green;
-}
-#blueButton{
-    background-color: blue;
-}
-#resetButton{
-    background-color: var(--color-background);
-}
-.main-container p{
-    font-size: var(--font-size-large);
-    margin-top: 8px;
-}
-
-
 
