@@ -16,14 +16,21 @@
     </header>
     <main>
         <div class="container main-container">
-            <h1>COLOR CHANGER</h1>
-            <div class="color-changer">
-                <button id="redButton" class="button color-button">Red</button>
-                <button id="greenButton" class="button color-button">Green</button>
-                <button id="blueButton" class="button color-button">Blue</button>
-                <button id="resetButton" class="button color-button">Reset</button>
+            <h1>GUESS THE NUMBER</h1>
+            <p> You have to guess the number between 1 and 100!<br> you have 10 attempts.</p>
+            <div class="container game-container">
+                <form id="gameForm">
+                    <label for ="guessInput">Enter your guess:</label>
+                    <input type="number" id="guessInput" name="guess" placeholder="Enter your guess" required>
+                    <button type="submit" class="button submit-answer">Submit</button>
+                    <button type="button" id="resetButton" class="button reset-game">Reset</button>
+                </form>
+            <div class="container result-container">
+                <p id="resultMessage">message: <span id="resultText"></span></p>
+                <p id="previousGuesses">Previous guesses:<span id="guessList"></span> </p>
+                <p id="attemptsLeft">Attempts left: <span id="attemptsCount">10</span></p>
             </div>
-            <p>Press the buttons to change the background color!</p>
+            </div>
         </div>
     </main>
 </body>

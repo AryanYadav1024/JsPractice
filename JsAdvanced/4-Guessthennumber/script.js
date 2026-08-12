@@ -1,87 +1,36 @@
-// const body = document.querySelector('body');
-// const buttons = document.querySelectorAll('.color-button');
+const form = document.querySelector('#gameForm');
+const previous = [];
+const resultMessage = document.querySelector('#resultText');
+const previousGuesses = document.querySelector('#guessList');
+const attemptsCount = document.querySelector('#attemptsCount');
+const num = Math.floor(Math.random()*100) + 1;
+const restart = document.querySelector('#resetButton')
+console.log(num);
+form.addEventListener("submit",event=>{
+    event.preventDefault();
+    const data = new FormData(form);
+    const guess = Number(data.get("guess"));
+    previous.push(guess);
+    if(guess > num){
+        resultMessage.innerHTML = "Lower";
+    }else if(guess < num){
+        resultMessage.innerHTML = "Higher";
+    }else{
+        resultMessage.innerHTML = "YoU Win MOTHERFUCKER ✅";
+        document.body.style.backgroundColor = "green";
+        form.querySelector("button").disabled=true;
+        return;
+    }
+    previousGuesses.innerHTML=`${[...previous]}`;
+    attemptsCount.innerHTML = `${(Number(attemptsCount.innerHTML) - 1)}`;
+    if((Number)(attemptsCount.innerHTML)== 0){
+        resultMessage.innerHTML = "You lose Restart😭";
+        document.body.style.backgroundColor="red";
+        form.querySelector("button").disabled=true;
+        return;
+    }
+})
 
-// buttons.forEach(btn =>{
-//     btn.addEventListener('click',event=>{
-
-//         // why didn't we use event.target.style.color
-//         // because this only works for inline html 
-//         // for this we need getComputedStyle from css sheet cssom
-//         const styles = getComputedStyle(event.target);
-//         document.body.style.backgroundColor=
-//         styles.backgroundColor;
-//     })
-// })
-
-
-/* 
-so getComputedStyle is not from cssom but from 
-computed styles layer after the render tree
-                HTML
-                 |
-                 ↓
-                DOM Tree
-                 |
-                 |
-                CSS
-                 |
-                 ↓
-                CSSOM Tree
-                 |
-                 ↓
-                Browser combines DOM + CSSOM
-                 |
-                 ↓
-                Render Tree
-                 |
-                 ↓
-                Computed Styles
-                 |
-                 ↓
-                Layout + Paint
-*/
-
-
-// another method
-
-/* 
-
-
-body {
-  --bg-color: white;
-  background-color: var(--bg-color);
-}suppose this is the css
-
-
-
-btn.addEventListener('click', event => {
-    const styles = getComputedStyle(event.target);
-
-    document.body.style.setProperty(
-        "--bg-color",
-        styles.backgroundColor
-    );
-});
-*/
-
-
-
-
-// the best method - event delegation and event bubbling 
-
-const parent = document.querySelector('.color-changer');
-// get the parent attach event listner here
-// imagine 100 children running foreach through node list reduces performance
-// more memory so instead event delegation
-// but group-accordingly as it recives clicks from everything inside parent even heading or paragraph
-// this is sites put transparent pages above with settimeout and evenlistners 
-// this is how scammers use eventlistners - they add a transparent overlay 
-// add settimeout repeat and event.target
-// window.location.href="some-site.com";
-
-
-parent.addEventListener('click',event=>{
-    const style = getComputedStyle(event.target);
-    document.body.style.backgroundColor=
-    style.backgroundColor;
+restart.addEventListener("click",event=>{
+    location.reload();
 })

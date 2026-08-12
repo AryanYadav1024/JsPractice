@@ -99,38 +99,61 @@ body{
 .main-container h1{
     margin-bottom: 5px;
 }
-.color-changer{
-    display: flex;
-}
 .main-container h1::after{
     margin-left: 0.25rem;
     content: "🤨";
 }
-.color-button{
-    padding: 70px;
-    font-size: 30px;
-    color: rgb(231, 231, 231);
-    border: 2px solid white;
-    border-radius: var(--border-radius);
-
-}
-
-#redButton{
-    background-color: red;
-}
-#greenButton{
-    background-color: green;
-}
-#blueButton{
-    background-color: blue;
-}
-#resetButton{
-    background-color: var(--color-background);
-}
 .main-container p{
     font-size: var(--font-size-large);
     margin-top: 8px;
+    text-align: center;
 }
 
 
+.game-container{
+    border-radius: var(--border-radius);
+    border: 1px dotted rgb(173, 159, 159);
+    margin-top: 10px;
+    width: 390px;
+    height: 450px;
+    background-color: var(--color-highlight);
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 30px;
+}
 
+#gameForm{
+    display: flex;
+    flex-direction: column;
+}
+input{
+    padding: 1%;
+    font: inherit;
+}
+label{
+    margin-top: 10px;
+    font-size: var(--font-size-large);
+    margin: 3px;
+}
+
+.submit-answer,.reset-game{
+    padding:var(--spacing-base);
+    font-size: var(--font-size-large);
+    background-color: antiquewhite;
+    color: #202020;
+}
+.submit-answer:hover,.reset-game:hover{
+    opacity: 0.85;
+    background-color: bisque;
+}
+
+.result-container{
+    background-color: rgb(32, 32, 33);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 22em;
+}
