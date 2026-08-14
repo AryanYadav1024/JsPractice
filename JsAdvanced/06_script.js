@@ -420,7 +420,7 @@ Important:
 
 This works:
 
-
+change color is the element where event listner was attached 
 removeEventListener("click", changeColor)
 
 
