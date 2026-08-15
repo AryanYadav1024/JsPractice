@@ -97,10 +97,27 @@ h1{
     gap: var(--spacing-lg);
     justify-content: center;
 }
+@media (min-width: 768px) {
+    .image-container{
+        display: grid;
+        grid-template-columns: repeat(2, 450px);
+        justify-content: center;
+        gap: var(--spacing-lg);
+    }
+}
 
 .post-card{
     width: 300px;
     height: 100%;
     display: flex;
     justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .post-card{
+        width: 450px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
 }
