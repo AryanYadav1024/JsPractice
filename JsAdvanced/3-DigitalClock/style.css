@@ -105,10 +105,24 @@ h1::after{
 }
 .clock{
     margin-top: 5px;
-    width: 12%;
-    padding: 1.6rem 1.5rem;
+    width: 30%;
+    padding: 1rem 1rem;
     background-color: var(--color-highlight);
     transition: none;
     text-align: center;
 }
 
+
+#start
+{
+    padding-inline: 2rem;
+    margin: 20px;
+    font-size: 2rem;
+    display: inline-block;
+}
+#stop
+{
+    padding-inline: 2rem;
+    font-size: 2rem;
+    display: inline-block;
+}
