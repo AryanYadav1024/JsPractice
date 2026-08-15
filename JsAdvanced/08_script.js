@@ -22,6 +22,7 @@ const factorial = function fact(n) {
 let factorialDisplay;
 const startBtn = document.querySelector("#start");
 startBtn.addEventListener("click",()=>{
+    if(coloChanger) return;
     console.log("started");
     let i = 0;
     factorialDisplay =
