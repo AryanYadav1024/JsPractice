@@ -40,6 +40,19 @@ img{
     object-fit: cover;
 }
 
+.button{
+    background-color: var(--accent);
+    color: var(--text-color);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.button:hover{
+    opacity: 0.82;
+    transform: translateY(-2px);
+}
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
@@ -68,11 +81,13 @@ body{
 
 nav{
     padding: var(--spacing-lg);
-    background-color: var(--accent);
+    background-color: var(--surface);
     display: flex;
     justify-content: center;
     align-items: center;
-     cursor: pointer;
+}
+h1{
+    font-size: 2rem;
 }
 
 
