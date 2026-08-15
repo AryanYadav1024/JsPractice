@@ -1,59 +1,767 @@
-const heading = document.querySelector("h1")
+/*
 
-heading.addEventListener("click",event=>{
-    window.location.href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events";
-})
+=====================================================
+DOM Events
+=====================================================
 
 
-/* 
-    this is onclick event
-    but it is not recommended to use this method because it will override 
-    any other onclick event that is already set on the element.
-   
-    better to use addEventListener method to add multiple event listeners to the same element.
-    event listeners also provide propagation and bubbling features which are not available in onclick event.
+Events are actions detected by the browser.
+
+Examples:
+
+- click
+- submit
+- keydown
+- mouseover
+- scroll
+
+
+JavaScript listens for these events and executes
+a callback function.
+
+
+
+=====================================================
+onclick vs addEventListener()
+=====================================================
+
 
 */
+
+
+const heading = document.querySelector("h1");
+
+
+heading.addEventListener("click",event=>{
+
+    window.location.href =
+    "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events";
+
+});
+
+
+/*
+
+addEventListener()
+
+METHOD
+
+Attaches an event listener to an element.
+
+
+Advantages:
+
+- Multiple listeners can be added to the same element
+- Supports event propagation
+- Better separation of HTML and JavaScript
+
+
+=====================================================
+
+
+onclick method:
+
+
+*/
+
 
 // document.getElementById("girl").onclick = ()=>{
 //     alert("girl clicked");
 // }
 
-// third parameter is optional and it is used to specify whether the event should be captured or bubbled.
-// it is by default set to false which means the event will be bubbled up to the parent elements.
-// meaning if i set it as true and set eventlistener at parent element then the event will be captured 
-// at parent element and will not be bubbled up to the child elements.
 
-document.getElementById("images").addEventListener("click",(event)=>{
+/*
+
+onclick
+
+PROPERTY
+
+Old way of adding events.
+
+
+Problem:
+
+Only one function can be assigned.
+
+
+Example:
+
+
+element.onclick = function(){
+
+}
+
+
+element.onclick = function(){
+
+}
+
+
+Second function overwrites the first one.
+
+
+
+=====================================================
+Event Listener Third Parameter
+=====================================================
+
+
+Syntax:
+
+
+element.addEventListener(
+    event,
+    callback,
+    true/false
+)
+
+
+
+Third parameter:
+
+true  → capturing phase
+
+false → bubbling phase (default)
+
+
+
+Capturing:
+
+Top → Bottom
+
+
+Bubbling:
+
+Bottom → Top
+
+
+
+Both are handled by the browser's event system.
+
+The third parameter only decides when our listener runs.
+
+
+
+*/
+
+
+document.getElementById("images")
+.addEventListener("click",(event)=>{
+
+
     console.log(event.currentTarget);
+
     console.log(event.target);
+
     console.log("ul clicked");
+
+
 });
 
-document.getElementById("girl").addEventListener("click",(event)=>{
+
+
+document.getElementById("girl")
+.addEventListener("click",(event)=>{
+
+
     console.log(event.currentTarget);
+
     console.log(event.target);
+
     console.log("girl clicked");
+
+
 });
 
-document.getElementById("castle").addEventListener("click",(event)=>{
+
+
+document.getElementById("castle")
+.addEventListener("click",(event)=>{
+
+
     console.log(event.currentTarget);
+
     console.log(event.target);
+
     console.log("castle clicked");
-    event.stopPropagation(); // this will stop the event from bubbling up to the parent elements.
-    /* this stops propagation of the event to the parent elements. so if i click on castle then only 
-       castle clicked will be printed and not ul clicked if ul clicked was set to capture during bubling phase.
-    */
+
+
+    event.stopPropagation();
+
+
 });
 
-/* 
-    The third parameter of addEventListener is used to specify whether the event should be captured or bubbled.
-    event capturing - top to bottom 
-    event bubbling - bottom to top
-    Capturing and bubbling are both built into the browser's event system. 
-    They happen for every event (if the event supports propagation), but your code decides which phase your listener runs in.
 
 
-    what happens is when you click on on li the browser first goes down the DOM tree to find the target element and then it goes up the DOM tree to find the parent elements.
-    now true or false just decides at which phase should your event listener should be called. if it is true then it will be called at capturing phase and if it is false then it will be called at bubbling phase.
+/*
+
+=====================================================
+event.stopPropagation()
+=====================================================
+
+
+METHOD
+
+
+Stops the event from travelling further.
+
+
+Example:
+
+
+Click:
+
+castle
+
+
+Without stopPropagation:
+
+
+castle clicked
+
+ul clicked
+
+
+
+With stopPropagation:
+
+
+castle clicked
+
+
+
+Important:
+
+It stops propagation to parent/child elements.
+
+It does NOT stop other listeners on the same element.
+
+
+
+For stopping all listeners on the same element:
+
+
+event.stopImmediatePropagation()
+
+
+
+=====================================================
+Event Propagation
+=====================================================
+
+
+
+DOM:
+
+
+        ul
+
+        |
+
+    ------------
+
+    |          |
+
+  girl      castle
+
+
+
+Click castle:
+
+
+Capturing:
+
+
+ul
+
+ ↓
+
+castle
+
+
+
+Target:
+
+
+castle
+
+
+
+Bubbling:
+
+
+castle
+
+ ↑
+
+ul
+
+
+
+true:
+
+Listener runs during capturing.
+
+
+false:
+
+Listener runs during bubbling.
+
+
+
+=====================================================
+Event Object
+=====================================================
+
+
+Browser automatically passes an event object
+to the callback function.
+
+
+Example:
+
+
+element.addEventListener("click",(event)=>{
+
+});
+
+
+
+event contains information about:
+
+- what happened
+- where it happened
+- which element caused it
+
+
+
+=====================================================
+Important Event Properties
+=====================================================
+
+
+
+1. event.target
+
+PROPERTY
+
+
+The actual element that triggered the event.
+
+
+
+Example:
+
+
+Click image:
+
+
+event.target
+
+
+returns:
+
+
+<img>
+
+
+
+=====================================================
+
+
+2. event.currentTarget
+
+PROPERTY
+
+
+The element where the event listener is attached.
+
+
+
+Example:
+
+
+Listener on ul:
+
+
+event.currentTarget
+
+
+returns:
+
+
+<ul>
+
+
+
+Difference:
+
+
+target
+
+=
+clicked element
+
+
+currentTarget
+
+=
+listener element
+
+
+
+=====================================================
+
+
+3. event.type
+
+PROPERTY
+
+
+Returns event type.
+
+
+
+Example:
+
+
+event.type
+
+
+Output:
+
+
+click
+
+
+
+=====================================================
+
+
+4. event.key
+
+
+PROPERTY
+
+
+Used with keyboard events.
+
+
+Example:
+
+
+document.addEventListener(
+"keydown",
+(event)=>{
+
+console.log(event.key);
+
+});
+
+
+
+Output:
+
+
+a
+
+Enter
+
+Space
+
+
+
+=====================================================
+
+
+5. event.clientX / event.clientY
+
+PROPERTIES
+
+
+Mouse position relative to viewport.
+
+
+
+Example:
+
+
+event.clientX
+
+event.clientY
+
+
+
+=====================================================
+Useful Event Methods
+=====================================================
+
+
+
+1. preventDefault()
+
+METHOD
+
+
+Stops browser's default behaviour.
+
+
+
+Example:
+
+Form submission:
+
+
+event.preventDefault();
+
+
+
+Stops:
+
+page reload
+
+
+
+Used for:
+
+- custom forms
+- preventing links
+- validation
+
+
+
+=====================================================
+
+
+2. stopPropagation()
+
+METHOD
+
+
+Stops event travelling through DOM.
+
+
+
+Example:
+
+
+child → parent
+
+
+stops parent listener.
+
+
+
+=====================================================
+
+
+3. stopImmediatePropagation()
+
+METHOD
+
+
+Stops:
+
+- propagation
+- other listeners on same element
+
+
+
+=====================================================
+Removing Events
+=====================================================
+
+
+removeEventListener()
+
+
+METHOD
+
+
+Removes an event listener.
+
+
+
+Example:
+
+
+function clickHandler(){
+
+console.log("clicked");
+
+}
+
+
+button.addEventListener(
+"click",
+clickHandler
+);
+
+
+
+Remove:
+
+
+button.removeEventListener(
+"click",
+clickHandler
+);
+
+
+
+=====================================================
+Removing Elements Using Events
+=====================================================
+
+
+*/
+
+
+// document.getElementById("images")
+// .addEventListener("click",(event)=>{
+
+
+//     console.log(event.target.parentNode);
+
+
+//     let removeIt = event.target.parentNode;
+
+
+//     removeIt.remove();
+
+
+// });
+
+// or I can do - this keep li but not the image
+document.getElementById("images")
+.addEventListener("click",(event)=>{
+
+    console.log(event.target.parentNode);
+
+    event.target.parentNode.removeChild(event.target);
+
+});
+
+/*
+
+event.target
+
+↓
+
+Clicked element
+
+
+parentNode
+
+↓
+
+Parent element
+
+
+remove()
+
+↓
+
+Removes element from DOM
+
+
+
+Example:
+
+
+Click image:
+
+
+event.target
+
+<img>
+
+
+parentNode
+
+<li>
+
+
+remove()
+
+
+<li> deleted
+
+
+
+=====================================================
+Important Event Methods and Properties
+=====================================================
+
+
+
+METHODS:
+
+addEventListener()
+
+removeEventListener()
+
+preventDefault()
+
+stopPropagation()
+
+stopImmediatePropagation()
+
+
+
+PROPERTIES:
+
+event.target
+
+event.currentTarget
+
+event.type
+
+event.key
+
+event.clientX
+
+event.clientY
+
+
+
+=====================================================
+Mental Model
+=====================================================
+
+
+User action
+
+      ↓
+
+Browser creates event object
+
+      ↓
+
+Capturing phase
+
+      ↓
+
+Target phase
+
+      ↓
+
+Bubbling phase
+
+      ↓
+
+Callback function executes
+
+
+
+Events are simply:
+
+Something happened
+
++
+
+Tell JavaScript what to do
+
+
+
 */
