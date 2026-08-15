@@ -1,0 +1,89 @@
+:root{
+    /* color */
+    --bg-color: #1e1e1e;
+    --surface: #2c2c2c;
+    --accent: #4a4889;
+    --text-color: #ffffff;
+    --muted: #cfcfcf;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* spacing */
+    --spacing-sm: 0.67rem;
+    --spacing-lg: 1.5rem;
+
+    /* typography */
+    --font-size-sm: 0.875rem;
+    --font-size-lg: 1.25rem;
+
+    /* border */
+    --border: 1px solid black;
+    --border-radius: 8px;
+
+    /* transition */
+    --transition: all 0.2s ease;
+
+
+    --container-width: 1200px;
+
+}
+
+*, *::before,₹ *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+ul,ol, li {
+    list-style: none;
+}
+img{
+    max-width: 100%;
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+.card{
+    background-color: var(--surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+.card:hover{
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    font-size: var(--font-size-sm);
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+nav{
+    padding: var(--spacing-lg);
+    background-color: var(--accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     cursor: pointer;
+}
+
+
+.image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+.post-card{
+    width: 300px;
+}
+
