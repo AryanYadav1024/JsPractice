@@ -2,15 +2,13 @@ const aryan = () => {
     console.log("aryan");
 };
 
-const change =
-setTimeout(() => {
+const change = setTimeout(() => {
     aryan();
     document.querySelector("h1").innerHTML = "meow";
 }, 1000);
 
 // this needs reference to stop
 // clearTimeout(change);
-
 
 const factorial = function fact(n) {
     if (n === 0) {
@@ -19,26 +17,32 @@ const factorial = function fact(n) {
     return n * fact(n - 1);
 };
 
-let factorialDisplay;
+let factorialDisplay = null;
 const startBtn = document.querySelector("#start");
-startBtn.addEventListener("click",()=>{
-    if(coloChanger) return;
+
+startBtn.addEventListener("click", () => {
+    if (factorialDisplay) return;
     console.log("started");
+
     let i = 0;
-    factorialDisplay =
-        setInterval(() => {
-            console.log(factorial(++i));
-            const p = document.createElement("p");
-            p.innerHTML=`${factorial(++i)}`;
-            document.body.appendChild(p)
-            document.body.style.textAlign="center";
-        }, 1000);
-})
+    factorialDisplay = setInterval(() => {
+        i += 1;
+        const value = factorial(i);
+        console.log(value);
+
+        const p = document.createElement("p");
+        p.innerHTML = `${value}`;
+        document.body.appendChild(p);
+        document.body.style.textAlign = "center";
+    }, 1000);
+});
 
 const stopBtn = document.querySelector("#stop");
-stopBtn.addEventListener("click",(event)=>{
+stopBtn.addEventListener("click", () => {
     console.log("ended");
-    setTimeout(() => {
-    clearInterval(factorialDisplay);
-    }, 1);
-})
+
+    if (factorialDisplay) {
+        clearInterval(factorialDisplay);
+        factorialDisplay = null;
+    }
+});
