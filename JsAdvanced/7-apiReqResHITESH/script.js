@@ -22,6 +22,10 @@ button.addEventListener("click", () => {
     xhr.send();
 
     button.disabled = true;
+    setTimeout(() => { // add 5 seconds gap before user can request data again
+        // this is how leetcode and others stop frequent submission to not overload the system
+        button.disabled = false;
+    }, 5000);
 });
 
 //avatar_url: followers
