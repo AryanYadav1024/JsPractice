@@ -45,8 +45,9 @@ stopBtn.addEventListener("click", () => {
         clearInterval(factorialDisplay);
         factorialDisplay = null;
     }
-    const p = document.querySelector("p");
-    p.innerHTML = "";
-    document.body.appendChild(p);
+    const p = document.querySelectorAll("p");
+    p.forEach((item)=>{
+        item.innerHTML="";
+    })
 
 });
