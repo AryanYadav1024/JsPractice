@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API | APPLICATION PROGRAMMING INTERFACE</title>
+    <script src="09_ApiReqAndV8Engine.js"></script>
+</head>
+<body style="background-color: #202020;">
+
+    <!--
+
+    ============================================================
+                    API - APPLICATION PROGRAMMING INTERFACE
+    ============================================================
+
+
+    IMPORTANT BIG PICTURE:
+
+    Frontend
+        ↓
+      API
+        ↓
+    Backend
+        ↓
+    Database
+
+
+    API is basically the interface/contract through which
+    different software systems communicate.
+
+    Example:
+
+        Frontend → GET /users/42 → Backend
+        Backend  → JSON response → Frontend
+
+
+    ============================================================
+                    BEFORE MODERN JSON APIs
+    ============================================================
+
+    Before modern APIs became common, websites still had ways
+    to communicate with servers.
+
+    One important technique was AJAX.
+
+    AJAX = Asynchronous JavaScript And XML
+
+
+    IMPORTANT:
+
+    AJAX is NOT a technology/framework/protocol.
+
+    It is a programming technique for making asynchronous
+    requests from JavaScript without requiring the entire
+    webpage to reload.
+
+
+    Earlier:
+
+        Browser
+            ↓
+        Request
+            ↓
+        Server
+            ↓
+        Entire HTML page
+            ↓
+        Browser reloads entire page
+
+
+    Problem:
+
+    If only one small piece of data changes, reloading the
+    entire webpage is inefficient and gives a worse UX.
+
+
+    With AJAX:
+
+        Browser
+            ↓
+        JavaScript makes request
+            ↓
+        Server
+            ↓
+        Data response
+            ↓
+        JavaScript receives response
+            ↓
+        DOM is updated
+            ↓
+        Only required part of page changes
+
+
+    So:
+
+        AJAX = technique for communicating asynchronously
+               and updating the page without full reload.
+
+
+    ============================================================
+                            XML
+    ============================================================
+
+    XML = eXtensible Markup Language
+
+
+    XML is a text-based format used to:
+
+        - store data
+        - describe data
+        - transport data
+
+
+    Unlike HTML, XML does NOT have a fixed set of predefined
+    tags.
+
+    You can create your own tags according to the structure
+    of the data.
+
+
+    Example:
+
+        <user>
+            <name>Aryan</name>
+            <age>20</age>
+            <role>student</role>
+        </user>
+
+
+    Conceptually:
+
+        user
+            ├── name = Aryan
+            ├── age = 20
+            └── role = student
+
+
+    XML itself does NOT know what <user>, <name>, or <role>
+    means.
+
+    The application consuming the XML decides what those
+    elements mean and how they should be processed.
+
+
+    For example:
+
+        <banana>
+            <name>Aryan</name>
+            <speed>200 million kmph</speed>
+        </banana>
+
+
+    XML doesn't care.
+
+    The application receiving this XML decides what
+    "banana", "name", and "speed" mean.
+
+
+    ============================================================
+                    XML IN SPRING
+    ============================================================
+
+    We used XML in Spring to configure the application.
+
+    Example:
+
+        <bean id="userService"
+              class="com.example.UserService">
+        </bean>
+
+
+    XML itself does NOT understand <bean>.
+
+    Spring has a configuration parser that understands
+    Spring-specific XML elements and uses them to:
+
+        - create objects/beans
+        - configure them
+        - inject dependencies
+        - configure the application
+
+
+    So remember:
+
+        XML = generic data/configuration format
+
+        Spring = application that gives meaning to
+                 specific XML configuration
+
+
+    ============================================================
+                            JSON
+    ============================================================
+
+    JSON = JavaScript Object Notation
+
+
+    JSON is another data representation format.
+
+    Example:
+
+        {
+            "user": {
+                "name": "Aryan",
+                "age": 20,
+                "role": "student"
+            }
+        }
+
+
+    XML:
+
+        <user>
+            <name>Aryan</name>
+            <age>20</age>
+            <role>student</role>
+        </user>
+
+
+    JSON:
+
+        {
+            "name": "Aryan",
+            "age": 20,
+            "role": "student"
+        }
+
+
+    JSON became extremely popular for web APIs because:
+
+        - lightweight
+        - easy for humans to read
+        - easy to parse
+        - maps naturally to JavaScript objects
+        - works well with frontend/backend applications
+
+
+    IMPORTANT:
+
+    JSON is NOT JavaScript.
+
+    It is a data format inspired by JavaScript object syntax.
+
+
+    JavaScript object:
+
+        const user = {
+            name: "Aryan",
+            age: 20
+        };
+
+
+    JSON:
+
+        {
+            "name": "Aryan",
+            "age": 20
+        }
+
+
+    JavaScript can easily convert between JSON and JS objects.
+
+
+    ============================================================
+                        API FUNDAMENTALS
+    ============================================================
+
+    API = Application Programming Interface
+
+
+    An API is an interface/contract through which one piece
+    of software communicates with another.
+
+
+    Example:
+
+        Frontend
+            ↓
+        API
+            ↓
+        Backend
+
+
+    Suppose the frontend wants user 42.
+
+        GET /users/42
+
+
+    The backend receives the request and might return:
+
+        {
+            "id": 42,
+            "name": "Aryan",
+            "age": 20
+        }
+
+
+    The API defines things such as:
+
+        - what operations are available
+        - where to send requests
+        - what data can be sent
+        - what data comes back
+        - what the data means
+        - expected request/response structure
+
+
+    Think of API as a CONTRACT:
+
+        Client:
+            "I will send this kind of request."
+
+        Server:
+            "I will respond according to this structure."
+
+
+    ============================================================
+                    API vs HTTP - VERY IMPORTANT
+    ============================================================
+
+    API and HTTP are NOT the same thing.
+
+
+    HTTP:
+
+        HTTP = HyperText Transfer Protocol
+
+    HTTP is a communication protocol.
+
+    It defines how requests and responses are structured
+    and transferred between clients and servers.
+
+
+    HTTP provides things such as:
+
+        GET
+        POST
+        PUT
+        PATCH
+        DELETE
+
+        Status codes
+
+        Headers
+
+        Request body
+
+        Response body
+
+
+    API is broader.
+
+    An API defines the interface/contract of the application.
+
+
+    Example API:
+
+        GET    /users
+        GET    /users/42
+        POST   /users
+        DELETE /users/42
+
+
+    These are API endpoints.
+
+
+    HTTP provides the mechanism:
+
+        GET
+        POST
+        DELETE
+        headers
+        status codes
+        body
+
+
+    The API defines what these requests mean for OUR
+    application.
+
+
+    Think:
+
+        HTTP = language/rules used for communication
+
+        API = contract describing what the application
+              exposes through that communication
+
+
+    ============================================================
+                         API ENDPOINT
+    ============================================================
+
+    An endpoint is a specific location through which an API
+    provides a particular operation/resource.
+
+
+    Example:
+
+        GET /users
+
+
+    Means:
+
+        "Give me users."
+
+
+    Example:
+
+        GET /users/42
+
+
+    Means:
+
+        "Give me the user whose ID is 42."
+
+
+    Example:
+
+        POST /users
+
+
+    Means:
+
+        "Create a new user."
+
+
+    Example:
+
+        DELETE /users/42
+
+
+    Means:
+
+        "Delete user 42."
+
+
+    A useful mental model:
+
+        METHOD + URL = API operation
+
+
+    ============================================================
+                    COMMON HTTP METHODS
+    ============================================================
+
+    GET
+
+        Used to retrieve data.
+
+        GET /users
+
+
+    POST
+
+        Used to create a new resource.
+
+        POST /users
+
+
+    PUT
+
+        Usually used to replace/update an entire resource.
+
+        PUT /users/42
+
+
+    PATCH
+
+        Used to partially update a resource.
+
+        PATCH /users/42
+
+
+    DELETE
+
+        Used to delete a resource.
+
+        DELETE /users/42
+
+
+    Think CRUD:
+
+        CREATE  → POST
+        READ    → GET
+        UPDATE  → PUT / PATCH
+        DELETE  → DELETE
+
+
+    ============================================================
+                    REQUEST / RESPONSE
+    ============================================================
+
+    API communication usually follows:
+
+        CLIENT
+           ↓
+        REQUEST
+           ↓
+        SERVER
+           ↓
+        RESPONSE
+           ↓
+        CLIENT
+
+
+    Request can contain:
+
+        - HTTP method
+        - URL
+        - headers
+        - query parameters
+        - path parameters
+        - request body
+
+
+    Response can contain:
+
+        - status code
+        - headers
+        - response body
+
+
+    Example:
+
+        GET /users/42
+
+
+    Response:
+
+        Status: 200 OK
+
+        {
+            "id": 42,
+            "name": "Aryan"
+        }
+
+
+    ============================================================
+                        STATUS CODES
+    ============================================================
+
+    HTTP status codes tell the client what happened.
+
+
+    2xx = SUCCESS
+
+        200 OK
+            Request succeeded.
+
+        201 Created
+            Resource was successfully created.
+
+
+    4xx = CLIENT ERROR
+
+        400 Bad Request
+            Client sent invalid data.
+
+        401 Unauthorized
+            Authentication is required/invalid.
+
+        403 Forbidden
+            Client is authenticated but does not
+            have permission.
+
+        404 Not Found
+            Requested resource doesn't exist.
+
+
+    5xx = SERVER ERROR
+
+        500 Internal Server Error
+            Something went wrong on the server.
+
+
+    Mental model:
+
+        2xx → "It worked."
+        4xx → "Your request is the problem."
+        5xx → "The server is having a bad day."
+
+
+    ============================================================
+                            REST
+    ============================================================
+
+    REST = Representational State Transfer
+
+
+    REST is NOT:
+
+        - a programming language
+        - a protocol
+        - a framework
+
+
+    REST is an ARCHITECTURAL STYLE.
+
+    It provides constraints/principles for designing
+    networked applications and APIs.
+
+
+    RESTful APIs commonly use:
+
+        HTTP + JSON
+
+
+    Example REST API:
+
+        GET    /users
+        GET    /users/42
+        POST   /users
+        PATCH  /users/42
+        DELETE /users/42
+
+
+    The API is designed around RESOURCES.
+
+        /users
+        /products
+        /orders
+        /posts
+
+
+    Instead of thinking:
+
+        /getUsers
+        /createUser
+        /deleteUser
+
+
+    REST generally prefers:
+
+        GET    /users
+        POST   /users
+        DELETE /users/42
+
+
+    The HTTP method tells us the operation.
+
+
+    ============================================================
+                    REST ARCHITECTURAL STYLE
+    ============================================================
+
+                            API
+                             │
+              ┌──────────────┼──────────────┐
+              ↓              ↓              ↓
+          REST API       GraphQL API      SOAP API
+                                           
+                         gRPC API
+                           etc.
+
+
+    REST is only ONE way of designing an API.
+
+
+    Some important REST principles include:
+
+        1. Client-Server
+        2. Stateless
+        3. Cacheable
+        4. Uniform Interface
+        5. Layered System
+
+
+    The most important beginner concept:
+
+        STATELESS
+
+
+    Stateless means the server should not depend on remembering
+    the client's previous request in order to understand the
+    current request.
+
+    Each request should contain the information necessary
+    for the server to process it.
+
+
+    ============================================================
+                    XMLHttpRequest
+    ============================================================
+
+    Before fetch() became the modern standard way to make
+    requests in JavaScript, browsers commonly used:
+
+        XMLHttpRequest
+
+    Example:
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "/users");
+
+        xhr.send();
+
+
+    XMLHttpRequest was one of the main technologies used
+    to implement AJAX.
+
+
+    The name is historical.
+
+    XMLHttpRequest can receive JSON, XML, text, etc.
+
+    It does NOT mean that every request must use XML.
+
+
+    Modern JavaScript commonly uses:
+
+        fetch()
+
+
+    Example:
+
+        fetch("/users")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+
+    It has states - 
+        1. UNSENT - The instance of XMLHttpRequest has been created, but the open() method has not been called yet.
+        2. OPENED - The open() method has been called.
+        3. HEADERS_RECEIVED - The send() method has been called, and the headers and status have been received.
+        4. LOADING - The response body is being received.
+        5. DONE - The entire response has been received.
+
+
+    ============================================================
+                    MODERN API FLOW
+    ============================================================
+
+    Modern web application:
+
+        Frontend
+            │
+            │ fetch()
+            ↓
+        HTTP Request
+            │
+            ↓
+        API / Backend
+            │
+            ↓
+        Database
+            │
+            ↓
+        Backend processes data
+            │
+            ↓
+        JSON Response
+            │
+            ↓
+        Frontend JavaScript
+            │
+            ↓
+        DOM Update
+
+
+    Example:
+
+        fetch("/api/users/42")
+
+
+    Browser sends:
+
+        GET /api/users/42
+
+
+    Server processes request.
+
+    Server may query:
+
+        SELECT * FROM users WHERE id = 42;
+
+
+    Database returns data.
+
+    Backend converts it into JSON:
+
+        {
+            "id": 42,
+            "name": "Aryan"
+        }
+
+
+    Browser receives response.
+
+    JavaScript processes it and updates the UI.
+
+
+    ============================================================
+                    API + JAVASCRIPT + V8
+    ============================================================
+
+    This is where V8 becomes important.
+
+
+    V8 is a JavaScript engine developed by Google.
+
+    Chrome uses V8.
+
+    Node.js also uses V8.
+
+
+    V8's job:
+
+        Execute JavaScript.
+
+
+    CPU cannot directly understand JavaScript.
+
+    CPU executes machine instructions.
+
+    Therefore:
+
+        JavaScript
+             ↓
+            V8
+             ↓
+        machine-level execution
+             ↓
+            CPU
+
+
+    ============================================================
+                    V8 HIGH-LEVEL PIPELINE
+    ============================================================
+
+        JavaScript source code
+                ↓
+             Parser
+                ↓
+              AST
+                ↓
+          Bytecode / execution
+                ↓
+            Interpreter
+                ↓
+        Optimizing compiler
+                ↓
+          Machine code
+                ↓
+               CPU
+
+
+    V8 uses interpretation and JIT compilation techniques.
+
+    Historically, important V8 components include:
+
+        Ignition
+            → interpreter / bytecode execution
+
+        TurboFan
+            → optimizing compiler
+
+
+    Do NOT memorize the exact internal pipeline yet.
+
+    The important idea is:
+
+        V8 takes JavaScript and turns it into something
+        the computer can efficiently execute.
+
+
+    ============================================================
+                V8 IS NOT THE ENTIRE BROWSER
+    ============================================================
+
+    VERY IMPORTANT.
+
+
+    V8 = JavaScript engine.
+
+    Browser = much larger environment.
+
+
+    Browser roughly contains:
+
+        Browser
+        ├── V8
+        ├── DOM APIs
+        ├── Web APIs
+        ├── Networking
+        ├── Timers
+        └── Event Loop
+
+
+    Therefore when we write:
+
+        fetch("/users")
+
+
+    V8 executes the JavaScript code.
+
+    But the networking functionality is provided by the
+    host environment (the browser).
+
+
+    This distinction becomes extremely important when
+    understanding asynchronous JavaScript.
+
+
+    ============================================================
+                JAVASCRIPT + ASYNC + API
+    ============================================================
+
+
+    Example:
+
+        console.log("A");
+
+        fetch("/users")
+            .then(() => {
+                console.log("B");
+            });
+
+        console.log("C");
+
+
+    Output:
+
+        A
+        C
+        B
+
+
+    Why?
+
+
+    JavaScript execution continues while the external
+    networking operation is being handled by the runtime.
+
+
+    Simplified:
+
+        JavaScript
+             │
+             │ fetch()
+             ↓
+        Browser networking
+             │
+             │ request happens
+             │
+        JavaScript continues
+             ↓
+        console.log("C")
+
+
+    When the network operation finishes:
+
+        Network completes
+              ↓
+        Promise continuation
+              ↓
+        Event loop / microtask processing
+              ↓
+        JavaScript executes callback
+              ↓
+             "B"
+
+
+    This is the connection between:
+
+        V8
+        +
+        Runtime
+        +
+        Web APIs
+        +
+        Event Loop
+        +
+        Promises
+        +
+        APIs
+
+
+    ============================================================
+                    BIG PICTURE
+    ============================================================
+
+
+                         YOUR JAVASCRIPT
+                               │
+                               ↓
+                              V8
+                               │
+                        executes JS
+                               │
+                               ↓
+                       Host Runtime APIs
+                               │
+                 ┌─────────────┼─────────────┐
+                 ↓             ↓             ↓
+             Networking      Timers        DOM
+                 │
+                 ↓
+              Internet
+                 │
+                 ↓
+               Server
+                 │
+                 ↓
+              Database
+
+
+    Response comes back:
+
+        Database
+            ↓
+        Server
+            ↓
+        HTTP Response
+            ↓
+        Browser networking
+            ↓
+        Event Loop
+            ↓
+        JavaScript
+            ↓
+        V8
+            ↓
+        Promise callback
+            ↓
+        DOM
+
+
+    ============================================================
+                    KEY DEFINITIONS TO REMEMBER
+    ============================================================
+
+    XML
+        Data/configuration format that allows custom tags.
+
+
+    JSON
+        Lightweight text-based data format commonly used
+        by modern APIs.
+
+
+    AJAX
+        Technique of making asynchronous requests from
+        JavaScript and updating the webpage without a
+        full page reload.
+
+
+    XMLHttpRequest
+        Browser API historically used to make HTTP requests
+        and implement AJAX.
+
+
+    API
+        Interface/contract through which software systems
+        communicate.
+
+
+    HTTP
+        Protocol used for communication between clients
+        and servers.
+
+
+    Endpoint
+        Specific API URL + operation exposed by a server.
+
+        Example:
+            GET /users/42
+
+
+    REST
+        Architectural style for designing APIs.
+
+
+    V8
+        JavaScript engine used by Chrome and Node.js
+        to execute JavaScript.
+
+
+    ============================================================
+                    ONE-LINE MENTAL MODEL
+    ============================================================
+
+    AJAX was a technique for asynchronous communication.
+
+    XML/JSON are data representation formats.
+
+    HTTP is a communication protocol.
+
+    API is the interface/contract exposed by software.
+
+    REST is an architectural style for designing APIs.
+
+    V8 is the JavaScript engine that executes JavaScript.
+
+    Browser/Node provides the runtime capabilities around V8,
+    such as networking, timers, filesystem access, etc.
+
+
+    ============================================================
+                        EVOLUTION
+    ============================================================
+
+        Traditional web
+              ↓
+        Full page requests
+              ↓
+            AJAX
+              ↓
+        XMLHttpRequest
+              ↓
+        XML / JSON responses
+              ↓
+        Modern APIs
+              ↓
+        REST + HTTP + JSON
+              ↓
+        fetch()
+              ↓
+        Modern frontend/backend applications
+
+
+    NOTE:
+
+    APIs did NOT suddenly appear after AJAX.
+
+    APIs existed long before modern web APIs.
+
+    What changed was how web applications commonly exposed
+    and consumed APIs.
+
+    -->
+</body>
+</html>
