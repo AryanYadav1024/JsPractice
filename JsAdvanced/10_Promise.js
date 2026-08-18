@@ -803,6 +803,8 @@ async function consumePromise5(){
         Promise eventually fulfills/rejects
 
 
+    Fetch internally has data: which has 2 arrays that are empty at the start , one is onFulfilled and other is onRejection
+    secondly the browser api or node based api is handled we get response or sometime error which fires rejection 
     ============================================================
                     GITHUB API + ASYNC/AWAIT
     ============================================================
