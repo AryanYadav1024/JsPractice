@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSprojectPractice</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header id="header" class="header">
+        <nav id="navBar">
+            <a href="../06_Project.html" class="button">HOME</a>
+            <a href="youtube.html" class="button">YOUTUBE CHANNEL</a>
+        </nav>
+    </header>
+    <main>
+        <div class="container mainContainer">
+            <h1>TODO LIST</h1>
+            <form id="todoForm" class="todoform">
+                <input name="task" type="text" id="todoInput" placeholder="Enter a new task...">
+                <button type="submit" id="addTask" class="button">Add Task</button>
+                <button type="button" id="clearAll" class="button">Clear All</button>
+            </form>
+            <ul id="todoList" class="card"></ul>
+        </div>
+        <div class="card clearAllCheck" id="deleteAll">
+            <button id="clearAllYes" class="button">Yes, Clear All</button>
+            <button id="clearAllNo" class="button">No, Cancel</button>
+        </div>
+    </main>
+</body>
+</html>
