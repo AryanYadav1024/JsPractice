@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>React</title>
+
+</head>
+
+<body>
+
+    <button id="btn">Click Me</button>
+
+</body>
+
+<script>
+
+    /*
+        We create a class to keep related data and behavior together.
+
+        The object created from this class will contain:
+        - data → library, server
+        - behavior → handleClick()
+    */
+
+    class Login {
+
+        constructor(){
+
+            // `new Login()` creates the Login object.
+            // Because of `new`, `this` inside the constructor
+            // refers to that newly created object.
+
+            this.library = "React";
+            this.server = "https://localhost:3000";
+
+
+            /*
+                Now we want the browser to run handleClick()
+                whenever the button is clicked.
+
+                querySelector() gives us the actual button element.
+            */
+
+            document
+                .querySelector("#btn")
+
+
+                /*
+                    addEventListener() needs a function reference.
+
+                    We DON'T write:
+
+                    this.handleClick()
+
+                    because () would execute handleClick immediately
+                    while the constructor is running.
+
+                    Instead:
+
+                    this.handleClick
+
+                    means "give me the function".
+                */
+
+                .addEventListener(
+
+                    "click",
+
+
+                    /*
+                        Problem:
+
+                        The browser will call this function later
+                        when the button is clicked.
+
+                        When the browser calls a normal event callback,
+                        `this` normally refers to the button.
+
+                        But we want `this` to refer to our Login object.
+
+                        So we use bind().
+                    */
+
+                    this.handleClick.bind(this)
+
+                    /*
+                        First `this`:
+                            this.handleClick
+                            ↓
+                            gets the handleClick function
+
+                        Second `this`:
+                            .bind(this)
+                            ↓
+                            current `this` = Login object
+
+                        bind() creates a NEW function that remembers:
+
+                            this → Login object
+
+                        That new function is given to addEventListener.
+
+                        Later:
+
+                            button clicked
+                                ↓
+                            browser calls bound function
+                                ↓
+                            handleClick()
+                                ↓
+                            this → Login object
+                    */
+
+                );
+
+        }
+
+
+        handleClick(){
+
+            console.log("Button Clicked");
+
+
+            /*
+                Because we used bind(this), `this` here
+                refers to the Login object.
+
+                Without bind(), the browser would normally
+                make `this` refer to the button that fired
+                the event.
+            */
+
+            console.log(this);
+
+        }
+
+    }
+
+
+    /*
+        `new` creates a Login object.
+
+        Conceptually:
+
+            const login = {};
+
+        and then the constructor runs with:
+
+            this → login
+
+        Therefore, during the constructor:
+
+            this.library
+            this.server
+            this.handleClick
+
+        all belong to the Login object.
+    */
+
+    const login = new Login();
+
+
+    /*
+        Complete flow:
+
+        Page loads
+            ↓
+        new Login()
+            ↓
+        Login object is created
+            ↓
+        constructor runs
+            ↓
+        `this` → Login object
+            ↓
+        button is found
+            ↓
+        handleClick function is given to addEventListener
+            ↓
+        bind(this) makes the function remember
+        the Login object as `this`
+            ↓
+        User clicks button
+            ↓
+        Browser calls the bound callback
+            ↓
+        handleClick() executes
+            ↓
+        `this` → Login object
+    */
+
+</script>
+
+</html>
