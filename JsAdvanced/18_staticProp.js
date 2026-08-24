@@ -23,3 +23,5 @@ class Teacher extends User{
 const userT = new Teacher("teacher","@teacher.com");
 // console.log(userT.createId());
 userT.logMe();
+
+console.log(User.createId()); // shared by all objects
