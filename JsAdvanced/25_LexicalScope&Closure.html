@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Closure & Lexical Scope</title>
+
+</head>
+
+<body>
+
+</body>
+
+<script>
+
+    /*
+        ============================================================
+        LEXICAL SCOPE + CLOSURE
+        ============================================================
+
+        First understand the big idea:
+
+        JavaScript decides WHERE a variable can be accessed
+        based on WHERE the code is WRITTEN.
+
+        This is called LEXICAL SCOPE.
+
+        Example:
+
+            function init() {
+
+                let name = "Mozilla";
+
+                function displayName() {
+
+                    console.log(name);
+
+                }
+
+            }
+
+        displayName() is written INSIDE init().
+
+        Therefore displayName() has access to the variables
+        that exist in init()'s lexical environment.
+
+        This is lexical scoping.
+    */
+
+
+    function init() {                   // outer function
+
+        /*
+            `name` is a LOCAL variable of init().
+
+            It belongs to init()'s execution environment.
+
+            Think:
+
+                init() Environment
+                ┌──────────────────┐
+                │ name = "Mozilla"  │
+                └──────────────────┘
+        */
+
+        let name = "Mozilla";
+
+
+        /*
+            displayName() is physically WRITTEN inside init().
+
+            Therefore displayName() is lexically nested inside init().
+
+            This means displayName() can look OUTWARD for variables.
+
+            Scope lookup works roughly like:
+
+                displayName()
+                     ↓
+                init()
+                     ↓
+                Global
+        */
+
+        function displayName() {
+
+
+            /*
+                These variables belong to displayName() itself.
+
+                They are NOT related to the closure concept here.
+            */
+
+            const heading = document.createElement("h1");
+
+            document.body.appendChild(heading);
+
+
+            /*
+                IMPORTANT:
+
+                `name` does NOT exist locally inside displayName().
+
+                So JavaScript looks outward through the scope chain.
+
+                Step 1:
+                    Search displayName()'s local environment.
+
+                    name ❌
+
+                Step 2:
+                    Search init()'s environment.
+
+                    name ✅
+
+                Therefore:
+
+                    heading.textContent = "Mozilla";
+            */
+
+            heading.textContent = name;
+
+
+            /*
+                Same lookup happens here.
+
+                displayName() asks:
+
+                    "Do I have a variable called name?"
+
+                No.
+
+                JavaScript searches the outer lexical environment.
+
+                    displayName()
+                         ↓
+                    init()
+                         ↓
+                    finds name = "Mozilla"
+
+                So:
+
+                    console.log(name);
+
+                prints:
+
+                    Mozilla
+            */
+
+            console.log(name);
+        }
+
+
+        /*
+            displayName() is called while init() is still executing.
+
+            At this moment the situation is:
+
+                init() Execution Context
+                ┌─────────────────────────┐
+                │ name = "Mozilla"        │
+                │ displayName = function  │
+                └─────────────────────────┘
+
+            displayName() can access `name`
+            because of lexical scope.
+        */
+
+        displayName();
+
+    }
+
+
+    /*
+        Calling init() creates an execution context for init().
+    */
+
+    init();
+
+
+    /*
+        ============================================================
+        IMPORTANT DISTINCTION
+        ============================================================
+
+        In THIS example, displayName() demonstrates
+        LEXICAL SCOPE.
+
+        A TRUE CLOSURE becomes especially obvious when
+        the inner function survives AFTER the outer function
+        has finished executing.
+
+        Example:
+
+            function init() {
+
+                let name = "Mozilla";
+
+                function displayName() {
+                    console.log(name);
+                }
+
+                return displayName;
+            }
+
+            const fn = init();
+
+            fn();
+
+        Here:
+
+            init()
+              ↓
+            creates `name`
+              ↓
+            creates displayName()
+              ↓
+            returns displayName
+              ↓
+            init() finishes
+              ↓
+            normally its execution context is gone
+              ↓
+            BUT displayName still needs `name`
+              ↓
+            JavaScript keeps the required lexical environment alive
+              ↓
+            fn() can still access `name`
+
+        THAT is the important closure behavior.
+
+        Closure ≈
+        A closure is a function together with the lexical environment
+        it retains access to, so that when the function later runs, 
+        it can resolve the variables it needs from that environment.
+
+            function
+            +
+            reference to its surrounding lexical environment
+
+
+        So:
+
+            const fn = init();
+
+        does NOT mean:
+
+            fn = just some function code
+
+        Conceptually, it behaves more like:
+
+            fn
+             │
+             ├── function displayName()
+             │
+             └── [[Environment]]
+                    │
+                    └── init() lexical environment
+                           │
+                           └── name = "Mozilla"
+
+
+        This is why a closure can "remember" variables
+        from the scope where it was created.
+    */
+
+
+/*
+    ============================================================
+    CLOSURE - WHAT IS IT INTERNALLY?
+    ============================================================
+
+
+    IMPORTANT:
+
+    A closure is NOT a separate JavaScript object/type.
+
+    There is no:
+
+        new Closure()
+
+    and:
+
+        typeof closure
+
+    does not give "closure".
+
+    A closure is a TERM used to describe the relationship between:
+
+        1. A function object
+                 +
+        2. The lexical environment that the function retains access to
+
+
+    ============================================================
+    1. FUNCTION IS AN ACTUAL OBJECT
+    ============================================================
+
+    When JavaScript creates a function:
+
+        function inner() {
+            console.log(x);
+        }
+
+    JavaScript creates a FUNCTION OBJECT.
+
+    Conceptually:
+
+        Function Object
+        ┌─────────────────────────────┐
+        │ function code               │
+        │ [[Environment]]             │
+        │ [[Call]]                    │
+        │ [[Prototype]]               │
+        └─────────────────────────────┘
+
+
+    `[[Environment]]` is an INTERNAL SLOT.
+
+    It is NOT a normal JavaScript property.
+
+    Therefore we cannot do:
+
+        inner.[[Environment]]     // ❌
+
+    It is part of JavaScript's internal runtime model.
+
+
+    ============================================================
+    2. WHAT DOES [[Environment]] MEAN?
+    ============================================================
+
+    Consider:
+
+        function outer() {
+
+            let x = 10;
+
+            return function inner() {
+                console.log(x);
+            };
+
+        }
+
+
+    When `inner` is created, it is created INSIDE `outer`.
+
+    Therefore `inner` is associated with the lexical environment
+    in which it was created.
+
+    Conceptually:
+
+        inner Function Object
+        ┌─────────────────────────────┐
+        │ code: console.log(x)        │
+        │ [[Environment]] ────────────┼──────┐
+        └─────────────────────────────┘      │
+                                             ↓
+                                    outer Lexical Environment
+                                    ┌─────────────────────────┐
+                                    │ x → 10                  │
+                                    └─────────────────────────┘
+
+
+    ============================================================
+    3. LEXICAL ENVIRONMENT
+    ============================================================
+
+    The lexical environment contains bindings for variables.
+
+    For example:
+
+        let x = 10;
+
+
+    Conceptually:
+
+        Lexical Environment
+        ┌─────────────────────┐
+        │ x → 10              │
+        └─────────────────────┘
+
+
+    It also has a connection to its OUTER lexical environment.
+
+    So scope lookup can move outward:
+
+        inner
+          ↓
+        outer
+          ↓
+        global
+
+
+    ============================================================
+    4. WHERE CLOSURE BECOMES IMPORTANT
+    ============================================================
+
+    Example:
+
+        function outer() {
+
+            let x = 10;
+
+            return function inner() {
+                console.log(x);
+            };
+
+        }
+
+        const fn = outer();
+
+        fn();
+
+
+    Step 1:
+
+        outer() is called.
+
+        JavaScript creates an execution context for outer.
+
+
+    Step 2:
+
+        `x` is created inside outer's lexical environment.
+
+            outer Lexical Environment
+            ┌─────────────────────┐
+            │ x → 10              │
+            └─────────────────────┘
+
+
+    Step 3:
+
+        `inner` is created inside outer.
+
+        Therefore `inner` gets access to outer's lexical
+        environment.
+
+            inner
+              │
+              │ [[Environment]]
+              ↓
+            outer Lexical Environment
+              │
+              └── x → 10
+
+
+    Step 4:
+
+        outer returns inner.
+
+            const fn = outer();
+
+
+        Now `fn` refers to the inner function object.
+
+
+    Step 5:
+
+        outer() has finished executing.
+
+        Normally, you might think its local variables
+        should become inaccessible.
+
+
+    But:
+
+        `fn` still has a reference to the lexical environment
+        containing `x`.
+
+
+        fn
+         │
+         ↓
+        inner Function Object
+         │
+         │ [[Environment]]
+         ↓
+        outer Lexical Environment
+         │
+         └── x → 10
+
+
+    Therefore the required environment remains accessible.
+
+
+    Step 6:
+
+        fn();
+
+    executes:
+
+        console.log(x);
+
+
+    JavaScript performs lexical lookup:
+
+        inner's local environment
+                ↓
+        outer lexical environment
+                ↓
+        x = 10
+
+
+    Output:
+
+        10
+
+
+    ============================================================
+    5. SO WHAT EXACTLY IS THE CLOSURE?
+    ============================================================
+
+    The FUNCTION itself is an actual object.
+
+    The LEXICAL ENVIRONMENT is part of JavaScript's
+    execution/scope machinery.
+
+    The word CLOSURE describes the fact that:
+
+        A function retains access to the lexical environment
+        in which it was created.
+
+
+    Mental model:
+
+        CLOSURE
+        =
+        Function
+        +
+        Retained access to its lexical environment
+
+
+    ============================================================
+    6. VERY IMPORTANT DISTINCTION
+    ============================================================
+
+    Do NOT think:
+
+        "JavaScript creates a Closure object."
+
+    ❌ There is no separate Closure object.
+
+    Instead think:
+
+        Function Object
+              +
+        [[Environment]] reference
+              ↓
+        Lexical Environment
+
+
+    This combination/behavior is called a CLOSURE.
+
+
+    ============================================================
+    7. LEXICAL SCOPE vs CLOSURE
+    ============================================================
+
+    LEXICAL SCOPE:
+
+        Determines WHERE JavaScript looks for variables.
+
+        Example:
+
+            function outer() {
+
+                let x = 10;
+
+                function inner() {
+                    console.log(x);
+                }
+
+            }
+
+
+        Because inner is WRITTEN inside outer,
+        it can access x.
+
+        This is lexical scope.
+
+
+    CLOSURE:
+
+        Becomes especially important when the inner function
+        survives and continues to access that environment.
+
+        Example:
+
+            function outer() {
+
+                let x = 10;
+
+                return function inner() {
+                    console.log(x);
+                };
+
+            }
+
+            const fn = outer();
+
+            fn();       // 10
+
+
+        `outer()` has finished, but `fn()` can still access `x`.
+
+        This is closure behavior.
+
+
+    ============================================================
+    8. FINAL MENTAL MODEL
+    ============================================================
+
+    Source Code
+        ↓
+    Function is created
+        ↓
+    Function becomes a Function Object
+        ↓
+    Function remembers its lexical creation environment
+        ↓
+    [[Environment]]
+        ↓
+    Lexical Environment
+        ↓
+    Variables can be resolved through the scope chain
+        ↓
+    If the function survives outside its original scope,
+    that retained environment enables the function to keep
+    accessing those variables.
+        ↓
+    This relationship/behavior is called a CLOSURE.
+
+
+    ONE-LINE DEFINITION:
+
+        A closure is a function object that retains access to
+        the lexical environment in which it was created.
+
+
+    ============================================================
+    IMPORTANT INTERNALS NOTE
+    ============================================================
+
+    `[[Environment]]` is the ECMAScript-level mental model.
+
+    It does NOT mean that V8 literally stores an object with
+    a property named `[[Environment]]`.
+
+    V8 has its own internal implementation and optimizations,
+    such as Context objects and heap allocation.
+
+    So keep these two layers separate:
+
+        JavaScript specification model
+                    ↓
+        [[Environment]] + Lexical Environment
+
+                    VS
+
+        V8 implementation
+                    ↓
+        Contexts + internal runtime structures + optimizations
+
+
+    This distinction becomes important when studying V8 internals.
+*/
+
+</script>
+
+</html>
