@@ -6,6 +6,7 @@ function Aryan(){
         <>
         <h1>Rendering our own file</h1>
         <p>Returning multiple elements using fragment</p>
+        <h2>This is from child aryan which we import to app parent</h2>
         </>
     )
 }
