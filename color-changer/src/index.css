@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    color: #eeeded;
+    margin: 0;
+    min-height: 100%;
+}
+
+.app {
+    min-height: 100vh;
+    padding: 30px;
+}
+.color-bar-container {
+    display: flex;
+    justify-content: center;
+}
+
+.color-bar {    
+    height: 50px;
+    border-radius: 10px;
+    background-color: #0e0e0e;
+    position: fixed;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.color-card {
+    color: #ffffff;
+    font-size: 1.5rem;
+    border: none;
+    padding: auto;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.color-card:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+.MainHeading{
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
