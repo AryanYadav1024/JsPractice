@@ -1,7 +1,10 @@
 function User(email,password){
     this._email = email
     this._password = password
-    Object.defineProperty(this,'email', {
+    // this is set normally when the new call happens 
+    // the getter setter is for afterwards while access or update
+}
+ Object.defineProperty(User.prototype,'email', {
         get: function(){
             return this._email.toUpperCase()
         },
@@ -9,7 +12,7 @@ function User(email,password){
             this._email = value
         }
     })
-     Object.defineProperty(this,'password', {
+     Object.defineProperty(User.prototype,'password', {
         get: function(){
             return this._password.toUpperCase()
         },
@@ -17,8 +20,7 @@ function User(email,password){
             this._password = value
         }
     })
-}
-
+    
 const user = new User("@meow.com","lajdsfl;kahf;")
-console.log(Object.getOwnPropertyDescriptor(user,"email"));
+console.log(Object.getOwnPropertyDescriptor(User.prototype,"email"));
 console.log(user.password);
