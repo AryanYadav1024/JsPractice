@@ -1,7 +1,5 @@
 import ColorCard from "./ColorCard"
 
-
-
 function ColorBar({changeColor}){
     const cards = [{name: 'Red',color: 'red'},
     {name: 'Green',color: 'green'},
