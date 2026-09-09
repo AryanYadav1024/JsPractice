@@ -17,7 +17,6 @@ import Github from './components/Github/Github'
 // react router sits between browser and react render tree
 const router = createBrowserRouter([
   {
-    path: '/',
     element: <Layout />,
     children: [
       {
