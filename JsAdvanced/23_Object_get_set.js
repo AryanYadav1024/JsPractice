@@ -13,5 +13,5 @@ const user = {
 
 
  
-const tea = Object.create(ser)
+const tea = Object.create(user)
 console.log(tea.email);

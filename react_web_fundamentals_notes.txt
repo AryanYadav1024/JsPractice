@@ -1,0 +1,982 @@
+REACT + WEB DEVELOPMENT FUNDAMENTALS
+=====================================
+
+1. REACT PROJECT STRUCTURE
+--------------------------
+
+A typical React project contains:
+
+my-first-react-app/
+├── build/              <- generated production output in CRA
+├── node_modules/       <- installed npm packages
+├── public/             <- static files, including index.html
+├── src/                <- our application source code
+│   ├── App.js
+│   └── index.js
+├── package.json        <- project metadata, dependencies, scripts
+└── package-lock.json   <- exact dependency versions/tree
+
+The important distinction:
+
+src/ = SOURCE CODE WE WRITE AND MAINTAIN
+build/ = GENERATED PRODUCTION ARTIFACT
+
+Conceptually:
+
+src/
+  ↓
+build tooling
+  ↓
+build/
+  ↓
+web server/CDN
+  ↓
+browser
+
+
+2. package.json, node_modules AND npm
+-------------------------------------
+
+package.json:
+- Describes the project.
+- Declares dependencies.
+- Contains scripts and other project metadata/configuration.
+- Roughly comparable to pom.xml in a Java/Maven project.
+
+Example:
+
+"dependencies": {
+    "react": "...",
+    "react-dom": "..."
+}
+
+node_modules/:
+- Contains the actual installed packages and their dependency tree.
+- npm downloads packages here.
+
+package-lock.json:
+- Records the exact dependency tree/versions used for reproducible installs.
+
+npm:
+- Node's package manager.
+- Used to install packages and run project scripts.
+
+Example:
+
+npm install
+    ↓
+reads package.json / lockfile
+    ↓
+downloads required packages
+    ↓
+places them in node_modules/
+
+
+3. npm SCRIPTS
+--------------
+
+package.json can contain scripts such as:
+
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+}
+
+Therefore:
+
+npm start
+    ↓
+runs the "start" script
+
+npm run build
+    ↓
+runs the "build" script
+
+The exact commands depend on the project/tooling.
+
+
+4. CRA AND VITE
+---------------
+
+Create React App (CRA):
+- A tool that creates a preconfigured React development environment.
+- It handles development/build tooling for us.
+- CRA is older/legacy compared with modern React project setup.
+
+Vite:
+- Modern frontend development/build tooling.
+- React and Vite are NOT the same thing.
+
+React:
+- UI library.
+
+Vite:
+- Development server + build tooling.
+
+So:
+
+React = helps build the UI
+Vite = helps develop, transform and build the application
+
+When creating a Vite project:
+
+npm create vite@latest
+
+we select:
+- React
+- JavaScript
+
+ESLint:
+- A linter/static code-quality checker.
+- Looks at code without executing it.
+- Can catch things such as unused variables, undefined variables and problematic patterns.
+
+ESLint != Prettier
+ESLint = code quality/problems
+Prettier = formatting
+
+
+5. App.js AND index.js
+----------------------
+
+App.js is conventionally the main/root React component.
+
+Example:
+
+function App() {
+    return (
+        <h1>Hello first time with react</h1>
+    );
+}
+
+export default App;
+
+App.js is NOT a special filename required by React.
+It is a convention. The component could be in another file/name.
+
+index.js in CRA is the entry/bootstrap module.
+
+Typical idea:
+
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(
+    document.getElementById('root')
+);
+
+root.render(
+    <App />
+);
+
+index.js:
+- Starts/bootstraps React.
+- Finds the HTML element where React should live.
+- Creates a React root.
+- Tells React what component tree to render.
+
+Conceptual flow:
+
+Browser
+  ↓
+public/index.html
+  ↓
+<div id="root"></div>
+  ↓
+index.js
+  ↓
+ReactDOM.createRoot(...)
+  ↓
+<App />
+  ↓
+App.js
+  ↓
+<h1>...</h1>
+  ↓
+DOM
+
+React does NOT replace index.html.
+HTML provides the initial shell.
+React renders its application into #root.
+
+
+6. COMPONENT TREE
+-----------------
+
+React applications are built from components.
+
+Example:
+
+index.js
+   ↓
+<App />
+   ↓
+<App>
+ ├── <Navbar />
+ ├── <Dashboard />
+ ├── <Sidebar />
+ └── <Footer />
+
+A component defines a piece of UI and can contain/use other components.
+
+
+7. JSX
+-------
+
+JSX is NOT ordinary JavaScript syntax.
+
+Example:
+
+function App() {
+    return <h1>Hello</h1>;
+}
+
+The <h1>...</h1> part is JSX.
+
+The browser's JavaScript engine does not directly understand JSX.
+
+The React toolchain transforms JSX into JavaScript before the browser executes it.
+
+Conceptually:
+
+JSX:
+
+return <h1>Hello</h1>;
+
+        ↓ transformation
+
+JavaScript representation:
+
+return React.createElement(
+    "h1",
+    null,
+    "Hello"
+);
+
+Modern React's automatic JSX runtime can generate different-looking output,
+but the important idea is:
+
+JSX → transformed by tooling → JavaScript → browser executes it
+
+A .js file can contain JSX.
+A .jsx file can also contain JSX.
+
+The extension does not itself make code JSX.
+The tooling is configured to process JSX.
+
+
+8. DEVELOPMENT SERVER
+---------------------
+
+React itself does NOT inherently require a server.
+
+A plain HTML file can be opened directly:
+
+file:///Users/you/project/index.html
+
+The browser can read local HTML/CSS/JS files directly.
+
+Modern React development tools normally use a local development server.
+
+For CRA:
+
+npm start
+
+usually starts a server such as:
+
+http://localhost:3000
+
+For Vite, a similar development server is started by its dev command.
+
+localhost:
+- Means the same computer.
+- The browser acts as the client.
+- The development server is the server.
+
+Conceptually:
+
+Browser
+   │
+   │ HTTP
+   ▼
+localhost development server
+   │
+   ▼
+source code + tooling
+   │
+   ▼
+browser
+
+
+9. WHY A DEVELOPMENT SERVER IS USEFUL
+-------------------------------------
+
+The development server does more than simply "send files."
+
+It can:
+- serve the application over HTTP
+- transform source code
+- process JSX
+- bundle/process modules when needed
+- watch files for changes
+- communicate changes to the browser
+- support Fast Refresh/HMR
+
+This gives the development workflow:
+
+edit App.js
+   ↓
+save
+   ↓
+development tooling detects change
+   ↓
+affected code is rebuilt/transformed
+   ↓
+browser is notified
+   ↓
+React Fast Refresh/HMR updates the running app
+   ↓
+DOM updates
+
+This is why changing React code can appear almost immediately without manually refreshing.
+
+Plain HTML opened with file:// does not automatically know that you edited
+the source file. You normally need to reload it.
+
+Fast Refresh is more sophisticated than simply reloading the whole page because
+it can preserve certain React component state.
+
+Important:
+- Development server watches/delivers/transforms.
+- Browser executes JavaScript.
+- React runs in the browser.
+- The development server is not "running React instead of the browser."
+
+
+10. PRODUCTION BUILD
+--------------------
+
+When we run:
+
+npm run build
+
+the tooling creates optimized production files.
+
+Conceptually:
+
+src/
+  ↓
+transform + bundle + optimize
+  ↓
+build/ or dist/
+  ↓
+production server/CDN
+  ↓
+browser
+
+The production output may contain:
+
+build/
+├── index.html
+└── static/assets...
+    ├── JavaScript
+    └── CSS
+
+The exact filenames/folders depend on the tool.
+
+The production server generally serves these generated files.
+
+The browser then:
+- downloads HTML
+- downloads JavaScript/CSS/assets
+- executes JavaScript
+- React runs in the browser
+- UI is rendered
+
+
+11. SOURCE CODE VS PRODUCTION BUILD
+-----------------------------------
+
+Source:
+
+src/
+├── App.js
+├── components/
+├── main/index.js
+└── ...
+
+Production:
+
+build/ or dist/
+├── index.html
+└── optimized JS/CSS/assets
+
+The server does NOT necessarily need your source code.
+
+It can contain only the production build:
+
+dist/
+├── index.html
+└── assets/
+
+The source code is normally kept in development/version control and is not
+what the browser needs.
+
+The browser needs the production JavaScript/CSS/assets.
+
+
+12. WHAT IS A SERVER?
+--------------------
+
+A server is fundamentally a machine/computer running software that provides
+a service over a network.
+
+"Server" can mean:
+1. The physical/virtual machine.
+2. The software/process providing a service.
+
+Example:
+
+Your Mac can act as a server if a program listens for network connections.
+
+app.listen(3000);
+
+Conceptually:
+
+Operating System
+      ↓
+port 3000
+      ↓
+Express process
+      ↓
+waiting for connections
+
+
+13. PORTS
+---------
+
+A server process usually listens on a network port.
+
+Example:
+
+192.168.1.10:3000
+             ↑
+            port
+
+The IP address identifies the network interface/device.
+The port helps the operating system identify which application/process should
+receive the traffic.
+
+Example:
+
+Browser
+   ↓
+IP address + port
+   ↓
+Operating system
+   ↓
+process listening on that port
+
+
+14. REQUEST AND RESPONSE
+------------------------
+
+HTTP commonly uses request/response:
+
+Browser
+   │
+   │ HTTP request
+   ▼
+Server
+   │
+   │ HTTP response
+   ▼
+Browser
+
+Example:
+
+GET /
+
+Server might respond with:
+
+index.html
+
+Then the browser discovers other required resources:
+
+GET /assets/index.js
+GET /assets/index.css
+
+The server sends those resources.
+
+
+15. SERVER DOES NOT ALWAYS MEAN HTTP REQUEST/RESPONSE
+-----------------------------------------------------
+
+HTTP commonly follows:
+
+Request → Response
+
+But networking itself is not defined as request/response.
+
+TCP provides a reliable byte-stream connection.
+WebSockets can keep a connection open and allow communication in both
+directions after connection establishment.
+
+Conceptually:
+
+Client ─────────► Server
+       ◄─────────
+       ─────────►
+       ◄─────────
+
+So keep the hierarchy clear:
+
+Network
+  ↓
+TCP/IP
+  ↓
+HTTP
+  ↓
+HTTP request/response
+
+HTTP is one application-layer protocol.
+
+
+16. OSI MODEL
+------------
+
+The OSI model is a conceptual model for networking.
+
+It is NOT seven literal boxes physically sitting inside every computer.
+
+A simplified view:
+
+Application     HTTP
+      ↓
+Transport       TCP/UDP
+      ↓
+Network         IP
+      ↓
+Data Link       Ethernet/Wi-Fi
+      ↓
+Physical        signals
+
+Real systems implement networking functions that correspond to these layers,
+but the OSI model is mainly a way to reason about communication.
+
+Different network devices operate primarily at different parts of the stack.
+
+
+17. CLIENT ↔ SERVER
+-------------------
+
+A useful general model:
+
+Client
+  ↓
+network
+  ↓
+server
+  ↓
+service/resource
+  ↓
+response
+  ↓
+client
+
+For a production React application:
+
+Browser
+   │
+   │ HTTPS
+   ▼
+Web server / CDN
+   │
+   ├── index.html
+   ├── JavaScript
+   ├── CSS
+   └── other assets
+        ↓
+     Browser
+        ↓
+   JavaScript executes
+        ↓
+      React runs
+        ↓
+        UI
+
+
+18. FRONTEND SERVER VS BACKEND SERVER
+-------------------------------------
+
+These are different responsibilities.
+
+Frontend web server/CDN:
+- serves HTML
+- serves JavaScript
+- serves CSS
+- serves images/assets
+
+Browser:
+- executes JavaScript
+- runs React
+- renders UI
+
+Backend server:
+- executes backend code
+- handles API requests
+- performs business logic
+- authentication/authorization
+- talks to databases
+
+Example MERN-style architecture:
+
+Browser
+   ├── frontend server/CDN
+   │       ↓
+   │   HTML + JS + CSS
+   │
+   └── Express API
+           ↓
+       business logic
+           ↓
+       PostgreSQL/database
+
+
+19. REVERSE PROXY
+-----------------
+
+A reverse proxy is a server that receives client requests and forwards them
+to another internal server/service.
+
+Example:
+
+Browser
+   ↓
+Nginx / reverse proxy
+   ↓
+Express backend
+   ↓
+Database
+
+The reverse proxy can also handle things such as:
+- routing
+- TLS/HTTPS termination
+- load balancing
+- caching
+- serving static files
+
+So a company's production infrastructure may contain several machines/services,
+not just one "server."
+
+
+20. WHAT IS THE MACHINE IN A COMPANY?
+-------------------------------------
+
+A company's server infrastructure can be:
+
+- physical servers in a data center
+- virtual machines
+- cloud instances
+- containers running on machines
+- managed storage/CDNs
+
+A cloud server is still fundamentally computing infrastructure running an
+operating system and software.
+
+"Server" does not mean a magical special type of computer.
+
+A normal computer can act as a server if it runs software that provides a
+network service.
+
+Example:
+
+Your Mac:
+- normally acts as a client
+- can also run a server process
+
+Company production:
+- machines are configured to provide services to many clients.
+
+
+21. MODULE
+----------
+
+A module is a unit of code that can be imported/exported.
+
+Example:
+
+// math.js
+
+export function add(a, b) {
+    return a + b;
+}
+
+Another module:
+
+// App.js
+
+import { add } from "./math.js";
+
+console.log(add(2, 3));
+
+Mental model:
+
+Module = reusable/importable unit of code
+
+
+22. PACKAGE
+-----------
+
+A package is a distributable unit of software.
+
+An npm package can contain:
+- multiple modules/files
+- its own package.json
+- dependencies
+- other metadata
+
+Example:
+
+npm install react
+
+The React package gets installed into:
+
+node_modules/react/
+
+Important:
+
+Module and package are not the same thing.
+
+A package can contain many modules.
+
+Module:
+- unit of code/import/export
+
+Package:
+- distributable software unit
+
+
+23. LIBRARY
+-----------
+
+A library is reusable functionality that your code uses/calls.
+
+Examples:
+- React → UI library
+- Axios → HTTP client library
+- Lodash → utility library
+
+Mental model:
+
+Your code
+   ↓
+calls/uses
+   ↓
+library
+
+Library describes the SOFTWARE'S ROLE/PURPOSE.
+
+
+24. FRAMEWORK
+------------
+
+A framework provides a larger application structure and commonly controls
+more of the application's execution flow.
+
+Simplified distinction:
+
+Library:
+    YOU call the library.
+
+Framework:
+    Framework controls the larger flow and invokes your code.
+
+This is related to Inversion of Control.
+
+Example:
+
+Express is commonly described as a minimal web framework.
+
+app.get("/users", (req, res) => {
+    // your handler
+});
+
+Express manages the HTTP application/request flow and invokes the handler
+when the matching request arrives.
+
+
+25. IMPORTANT: THESE TERMS ARE NOT A SINGLE HIERARCHY
+-----------------------------------------------------
+
+Do NOT think:
+
+module < package < library < framework < project
+
+They describe different dimensions.
+
+Term         Meaning
+---------------------------------------------------------------
+Module       A unit of code/import/export
+Package      A distributable unit of software
+Library      Reusable functionality your code uses
+Framework    Larger application structure/control
+Project      Your entire application/workspace
+
+One software can fit multiple descriptions.
+
+Example:
+
+React:
+- library = what it is conceptually
+- npm package = how it is distributed
+
+Express:
+- framework = its conceptual role
+- npm package = how it is distributed
+
+
+26. HOW EVERYTHING CONNECTS
+---------------------------
+
+Your project:
+
+PROJECT
+│
+├── Your source code
+│   ├── modules
+│   ├── components
+│   └── other files
+│
+├── Dependencies
+│   └── npm packages
+│       ├── libraries
+│       ├── frameworks
+│       └── their dependencies
+│
+├── package.json
+├── package-lock.json
+└── build/dist
+    └── production artifacts
+
+
+Full pipeline:
+
+You write source code
+        ↓
+modules import other modules
+        ↓
+your project uses external packages
+        ↓
+packages provide libraries/frameworks/tooling
+        ↓
+development server/tooling transforms source
+        ↓
+browser receives/transforms appropriate code
+        ↓
+React runs in browser
+        ↓
+production build is generated
+        ↓
+build/dist is deployed
+        ↓
+web server/CDN serves production assets
+        ↓
+browser downloads them
+        ↓
+browser executes JavaScript
+        ↓
+React renders UI
+
+
+27. FINAL MENTAL MODEL
+----------------------
+
+Keep these distinctions clear:
+
+PROJECT
+= entire application/workspace
+
+MODULE
+= unit of code
+
+PACKAGE
+= distributable unit of software
+
+LIBRARY
+= reusable functionality
+
+FRAMEWORK
+= larger application structure/control
+
+SERVER
+= machine/software providing a network service
+
+PORT
+= network endpoint used to direct traffic to a process
+
+REQUEST
+= client asking for something
+
+RESPONSE
+= server replying
+
+BUILD
+= generated production artifact
+
+BROWSER
+= client that downloads and executes frontend code
+
+
+The complete picture:
+
+                    INTERNET
+                       │
+                       ▼
+                    Browser
+                   (CLIENT)
+                       │
+                  HTTP/HTTPS
+                       │
+                  IP : PORT
+                       │
+                       ▼
+              Web Server / CDN
+                  (SERVER)
+                       │
+              serves build/dist
+                       │
+                       ▼
+                    Browser
+                       │
+                executes JS
+                       │
+                    React
+                       │
+                    renders
+                       │
+                      UI
+
+For backend requests:
+
+Browser
+   │
+   │ HTTP request
+   ▼
+Reverse Proxy
+   │
+   ▼
+Express
+   │
+   ├── application logic
+   ├── authentication
+   └── database queries
+             │
+             ▼
+          Database
+             │
+             ▼
+         HTTP response
+             │
+             ▼
+          Browser
